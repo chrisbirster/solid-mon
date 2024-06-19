@@ -1,13 +1,31 @@
-import { A } from "@solidjs/router";
-import Counter from "~/components/Counter";
+import { For, type VoidComponent } from "solid-js";
 
-export default function Results() {
+import { createAsync, type RouteDefinition } from "@solidjs/router";
+import { cache } from "@solidjs/router";
+
+import { db } from "~/server/db";
+import { fooTable } from "../../drizzle/schema";
+
+const getFoo = cache(async function getFoo() {
+  "use server";
+  const response = await db.select().from(fooTable).execute();
+  console.log("response");
+  console.log(response);
+  return response;
+}, "foo-data");
+
+export const route = {
+  load: () => getFoo(),
+} satisfies RouteDefinition;
+
+const Results: VoidComponent = () => {
+  const foos = createAsync(() => getFoo());
+
   return (
     <main class="text-center mx-auto text-gray-700 p-4">
       <h1 class="max-6-xs text-6xl text-sky-700 font-thin uppercase my-16">
         Results Page
       </h1>
-      <Counter />
       <p class="mt-8">
         Visit{" "}
         <a
@@ -20,12 +38,18 @@ export default function Results() {
         to learn how to build Solid apps.
       </p>
       <p class="my-4">
-        <A href="/" class="text-sky-600 hover:underline">
-          Home
-        </A>
-        {" - "}
         <span>Results Page</span>
+        <For each={foos()} fallback={<div>Loading...</div>}>
+          {(foo) => (
+            <div>
+              <div>{foo.id}</div>
+              <div>{foo.bar}</div>
+            </div>
+          )}
+        </For>
       </p>
     </main>
   );
-}
+};
+
+export default Results;
