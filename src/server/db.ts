@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
-import * as schema from "../../drizzle/schema";
+import * as drizzle_schema from "../../drizzle/schema";
 
 const client = createClient({
   // @ts-ignore
@@ -8,4 +8,5 @@ const client = createClient({
   authToken: process.env.TURSO_AUTH_TOKEN,
 });
 
-export const db = drizzle(client, { schema });
+export type Pokemon = drizzle_schema.Pokemon;
+export const db = drizzle(client, { schema: drizzle_schema });
