@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { helloBuilder } from "../prpc";
+import { helloBuilder } from "~/server/prpc";
 
 export const helloQuery = helloBuilder
   .input(

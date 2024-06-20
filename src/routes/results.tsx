@@ -1,21 +1,24 @@
-import { type VoidComponent } from "solid-js";
+import { Show, type VoidComponent } from "solid-js";
 import { createAsync, type RouteDefinition } from "@solidjs/router";
-import { getFoo } from "~/server/foo";
 import { getRandomPokemon } from "~/server/pokemon";
 import { helloQuery } from "~/server/hello/hello.queries";
+import { fooQuery } from "~/server/foo/foo.queries";
 
 export const route = {
   load: () => {
-    getFoo(), getRandomPokemon();
+    getRandomPokemon();
   },
 } satisfies RouteDefinition;
 
 const Results: VoidComponent = () => {
-  const foo = createAsync(() => getFoo());
   const pokemon = createAsync(() => getRandomPokemon());
 
   const hello = helloQuery(() => ({
     hello: "deez",
+  }));
+
+  const foo = fooQuery(() => ({
+    bar: "there",
   }));
 
   return (
@@ -37,7 +40,9 @@ const Results: VoidComponent = () => {
       <p class="my-4">
         <span>Results Page</span>
       </p>
-      <div>{foo()?.bar}</div>
+      <Show when={foo.data} fallback={<p>Loading...</p>}>
+        {(data) => <div>{data().bar}</div>}
+      </Show>
       <div>{pokemon()?.name}</div>
       <div>{hello.data}</div>
     </main>
