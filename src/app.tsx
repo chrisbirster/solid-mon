@@ -16,9 +16,9 @@ export default function App() {
       root={(props) => (
         <MetaProvider>
           <Title>Solid-Mon</Title>
+          <Nav />
           <Suspense>
             <PRPCProvider queryClient={queryClient}>
-              <Nav />
               {props.children}
             </PRPCProvider>
           </Suspense>
