@@ -1,25 +1,17 @@
 import { For, type VoidComponent } from "solid-js";
-
 import { createAsync, type RouteDefinition } from "@solidjs/router";
-import { cache } from "@solidjs/router";
-
-import { db } from "~/server/db";
-import { foo } from "../../drizzle/schema";
-
-const getFoo = cache(async function getFoo() {
-  "use server";
-  const response = await db.select().from(foo).execute();
-  console.log("response");
-  console.log(response);
-  return response;
-}, "foo-data");
+import { getFoo } from "~/server/foo";
+import { getRandomPokemon } from "~/server/pokemon";
 
 export const route = {
-  load: () => getFoo(),
+  load: () => {
+    getFoo(), getRandomPokemon();
+  },
 } satisfies RouteDefinition;
 
 const Results: VoidComponent = () => {
-  const foos = createAsync(() => getFoo());
+  const foo = createAsync(() => getFoo());
+  const pokemon = createAsync(() => getRandomPokemon());
 
   return (
     <main class="text-center mx-auto text-gray-700 p-4">
@@ -39,14 +31,9 @@ const Results: VoidComponent = () => {
       </p>
       <p class="my-4">
         <span>Results Page</span>
-        <For each={foos()} fallback={<div>Loading...</div>}>
-          {(foo) => (
-            <div>
-              <div>{foo.bar}</div>
-            </div>
-          )}
-        </For>
       </p>
+      <div>{foo()?.bar}</div>
+      <div>{pokemon()?.name}</div>
     </main>
   );
 };
