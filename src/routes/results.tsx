@@ -4,11 +4,11 @@ import { createAsync, type RouteDefinition } from "@solidjs/router";
 import { cache } from "@solidjs/router";
 
 import { db } from "~/server/db";
-import { fooTable } from "../../drizzle/schema";
+import { foo } from "../../drizzle/schema";
 
 const getFoo = cache(async function getFoo() {
   "use server";
-  const response = await db.select().from(fooTable).execute();
+  const response = await db.select().from(foo).execute();
   console.log("response");
   console.log(response);
   return response;
@@ -42,7 +42,6 @@ const Results: VoidComponent = () => {
         <For each={foos()} fallback={<div>Loading...</div>}>
           {(foo) => (
             <div>
-              <div>{foo.id}</div>
               <div>{foo.bar}</div>
             </div>
           )}

@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
-    "start": "vinxi start"
+    "start": "vinxi start",
+    "drizzle:gen": "npx tsx ./drizzle/seed.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.6.2",

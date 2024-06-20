@@ -5,6 +5,7 @@ dist
 .vercel
 .netlify
 .vinxi
+drizzle/migrations
 
 # Environment
 .env
