@@ -1,5 +1,5 @@
 import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { sql } from "drizzle-orm";
+import { sql, InferSelectModel } from "drizzle-orm";
 
 export const foo = sqliteTable("foo", {
   bar: text("bar").notNull().default("Hey!"),
@@ -10,6 +10,8 @@ export const pokemon = sqliteTable("pokemon", {
   name: text("name"),
   spriteUrl: text("sprite_url"),
 });
+
+export type Pokemon = InferSelectModel<typeof pokemon>;
 
 export const votes = sqliteTable(
   "votes",

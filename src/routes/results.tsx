@@ -1,7 +1,6 @@
 import { Show, type VoidComponent } from "solid-js";
 import { helloQuery } from "~/server/hello/hello.queries";
 import { fooQuery } from "~/server/foo/foo.queries";
-import { getPokePairQuery } from "~/server/pokemon/pokemon.queries";
 
 const Results: VoidComponent = () => {
   const hello = helloQuery(() => ({
@@ -11,8 +10,6 @@ const Results: VoidComponent = () => {
   const foo = fooQuery(() => ({
     bar: "there",
   }));
-
-  const pokemon = getPokePairQuery();
 
   return (
     <main class="text-center mx-auto text-gray-700 p-4">
@@ -35,9 +32,6 @@ const Results: VoidComponent = () => {
       </p>
       <Show when={foo.data} fallback={<p>Loading...</p>}>
         {(data) => <div>{data().bar}</div>}
-      </Show>
-      <Show when={pokemon.data} fallback={<p>Loading...</p>}>
-        {(data) => <div>{JSON.stringify(data())}</div>}
       </Show>
       <div>{hello.data}</div>
     </main>
