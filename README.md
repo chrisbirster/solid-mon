@@ -1,5 +1,7 @@
 # SolidStart
 
+Heavily inspired by the OG [roundest-mon](https://github.com/t3dotgg/roundest-mon)
+
 Everything you need to build a Solid project, powered by [`solid-start`](https://start.solidjs.com);
 
 ## Creating a project
