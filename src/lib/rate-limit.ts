@@ -1,20 +1,18 @@
-import { builder$, middleware$ } from "@solid-mediakit/prpc";
-
 const rateLimitMap = new Map<
   string,
   { timestamps: number[]; lastAccess: number }
 >();
 const RATE_LIMIT_WINDOW_MS = 10000; // 10 seconds
 const MAX_REQUESTS = 20;
-const CLEANUP_INTERVAL_MS = 60000; // 1 minute
+export const CLEANUP_INTERVAL_MS = 60000; // 1 minute
 
-const getClientIp = (event$: any) => {
-  const forwarded = event$.request.headers.get("x-forwarded-for");
-  return forwarded ? forwarded.split(",").pop().trim() : event$.clientAddress;
+const getClientIp = (event: any) => {
+  const forwarded = event.request.headers.get("x-forwarded-for");
+  return forwarded ? forwarded.split(",").pop().trim() : event.clientAddress;
 };
 
-const rateLimiter = ({ event$ }: { event$: any }) => {
-  const ip = getClientIp(event$);
+export const rateLimiter = (event: any) => {
+  const ip = getClientIp(event);
 
   const currentTime = Date.now();
   const entry = rateLimitMap.get(ip) || {
@@ -25,7 +23,7 @@ const rateLimiter = ({ event$ }: { event$: any }) => {
     (time) => currentTime - time < RATE_LIMIT_WINDOW_MS,
   );
 
-  // console.log(">>>>> entry: ", entry);
+  console.log(">>>>> entry: ", entry);
 
   if (requestTimes.length >= MAX_REQUESTS) {
     return {
@@ -41,7 +39,7 @@ const rateLimiter = ({ event$ }: { event$: any }) => {
   };
 };
 
-const cleanupRateLimitMap = () => {
+export const cleanupRateLimitMap = () => {
   const currentTime = Date.now();
   rateLimitMap.forEach((value, key) => {
     if (currentTime - value.lastAccess > RATE_LIMIT_WINDOW_MS) {
@@ -49,20 +47,3 @@ const cleanupRateLimitMap = () => {
     }
   });
 };
-
-setInterval(cleanupRateLimitMap, CLEANUP_INTERVAL_MS);
-
-export const helloBuilder = builder$()
-  .middleware$(() => {
-    return {
-      hello: "world",
-    };
-  })
-  .middleware$((ctx) => {
-    return {
-      ...ctx,
-      world: "nutz",
-    };
-  });
-
-export const rateLimitMW = middleware$(rateLimiter);

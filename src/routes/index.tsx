@@ -1,60 +1,55 @@
 import { Title } from "@solidjs/meta";
 import { Show } from "solid-js";
-import { getPokePairQuery } from "~/server/pokemon/pokemon.queries";
-import { voteMutation } from "~/server/pokemon/pokemon.mutations";
+import { type RouteDefinition, createAsync } from "@solidjs/router";
 import PokemonListing from "~/components/PokemonListing";
+import { getPokePair } from "~/server/pokemon";
+
+export const route = {
+  load: () => getPokePair(),
+} satisfies RouteDefinition;
 
 export default function Home() {
-  const pokemon = getPokePairQuery();
-  const castVote = voteMutation(() => ({
-    onError(error) {
-      if (error.isZodError()) {
-        console.log("zod error:", error.cause.fieldErrors);
-      } else {
-        console.log(error.message);
-      }
-    },
-    onSuccess(data) {
-      if (data.refetch_pokemon) {
-        pokemon.refetch();
-      }
-    },
-  }));
+  const pokemon = createAsync(() => getPokePair());
 
   return (
     <main class="text-center mx-auto text-gray-700 p-4">
-      <div class="h-screen w-screen flex flex-col justify-between items-center relative">
+      <div class="h-screen w-screen flex flex-col items-center relative">
         <Title>Most Solid Pokemon</Title>
         <div class="text-2xl text-center pt-8">
           Which Pokémon is more Solid?
         </div>
-        <Show when={pokemon.data} fallback={<p>Loading...</p>}>
-          {(data) => (
-            <div class="bg-red-400 p-8 flex justify-between items-center max-w-2xl flex-col md:flex-row animate-fade-in">
-              <PokemonListing
-                pokemon={data().firstPokemon}
-                vote={() =>
-                  castVote.mutate({
-                    votedFor: data().firstPokemon.id,
-                    votedAgainst: data().secondPokemon.id,
-                  })
-                }
-                disabled={pokemon.isLoading}
-              />
-              <div class="p-8 italic text-xl">{"or"}</div>
-              <PokemonListing
-                pokemon={data().secondPokemon}
-                vote={() =>
-                  castVote.mutate({
-                    votedFor: data().secondPokemon.id,
-                    votedAgainst: data().firstPokemon.id,
-                  })
-                }
-                disabled={pokemon.isLoading}
-              />
-              <div class="p-2" />
-            </div>
-          )}
+        <div class="h-48" />
+        <Show when={pokemon()} fallback={<p>Loading...</p>}>
+          {(data) => {
+            return (
+              <div class="bg-red-400 p-8 flex justify-between items-center max-w-2xl flex-col md:flex-row animate-fade-in">
+                <PokemonListing
+                  pokemon={data().firstPokemon}
+                  vote={
+                    () => console.log("voted")
+                    // castVote.mutate({
+                    //   votedFor: data().firstPokemon.id,
+                    //   votedAgainst: data().secondPokemon.id,
+                    // })
+                  }
+                  disabled={false}
+                />
+                <div class="p-8 italic text-xl">{"or"}</div>
+                <PokemonListing
+                  pokemon={data().secondPokemon}
+                  vote={
+                    () => console.log("voted")
+                    // castVote.mutate({
+                    //   votedFor: data().secondPokemon.id,
+                    //   votedAgainst: data().firstPokemon.id,
+                    // })
+                  }
+                  disabled={false}
+                />
+                <div class="p-2" />
+              </div>
+            );
+          }}
         </Show>
       </div>
     </main>
