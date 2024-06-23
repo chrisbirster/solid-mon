@@ -2,9 +2,6 @@ import { MetaProvider, Title, Meta, Link } from "@solidjs/meta";
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { Suspense } from "solid-js";
-import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
-import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
-import { PRPCProvider } from "@solid-mediakit/prpc/provider";
 
 import Nav from "~/components/Nav";
 
@@ -16,14 +13,6 @@ export default function App() {
   const title = "Solid Pokémon - Public Poll";
   const imageMetaURL = "https://solid-mon.vercel.app/spheal.png";
 
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: true,
-        staleTime: 1000,
-      },
-    },
-  });
   return (
     <Router
       root={(props) => (
@@ -57,12 +46,7 @@ export default function App() {
           <Link rel="manifest" href="/site.webmanifest" />
           <Link rel="shortcut icon" href="/favicon.ico" />
           <Nav />
-          <Suspense>
-            <PRPCProvider queryClient={queryClient}>
-              <SolidQueryDevtools />
-              {props.children}
-            </PRPCProvider>
-          </Suspense>
+          <Suspense>{props.children}</Suspense>
         </MetaProvider>
       )}
     >
