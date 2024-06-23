@@ -1,4 +1,4 @@
-# SolidStart
+# Solid-Mon
 
 Heavily inspired by the OG [roundest-mon](https://github.com/t3dotgg/roundest-mon)
 
@@ -32,3 +32,11 @@ Solid apps are built with _presets_, which optimise your project for deployment 
 By default, `npm run build` will generate a Node app that you can run with `npm start`. To use a different preset, add it to the `devDependencies` in `package.json` and specify in your `app.config.js`.
 
 ## This project was created with the [Solid CLI](https://solid-cli.netlify.app)
+
+
+
+## TODO
+- [ ] Convert the results query to drizzle 
+- [ ] Add a way to show the vote percentage 
+- [ ] Styling and UI 
+- [ ] Implement Blocked page in routing (how to handle 429?)
