@@ -10,12 +10,10 @@ type Props = {
 };
 
 export default function PokemonListing(props: Props) {
-  console.log("PokemonListing", props.pokemon);
   return (
     <div
       class="flex flex-col items-center transition-opacity"
       classList={{ "opacity-0": props.disabled }}
-      key={props.pokemon.id}
     >
       <div class="text-xl text-center capitalize mt-[-0.5rem]">
         {props.pokemon.name}

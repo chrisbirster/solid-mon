@@ -27,7 +27,6 @@ export default function Home() {
                 <PokemonListing
                   pokemon={data().firstPokemon}
                   vote={async () => {
-                    console.log("voted");
                     await castVote({
                       votedFor: data().firstPokemon.id,
                       votedAgainst: data().secondPokemon.id,
@@ -39,7 +38,6 @@ export default function Home() {
                 <PokemonListing
                   pokemon={data().secondPokemon}
                   vote={async () => {
-                    console.log("voted");
                     await castVote({
                       votedFor: data().secondPokemon.id,
                       votedAgainst: data().firstPokemon.id,

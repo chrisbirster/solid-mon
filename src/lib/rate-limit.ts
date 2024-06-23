@@ -43,9 +43,6 @@ export class RateLimitDeez {
       (time) => currentTime - time < this.RATE_LIMIT_WINDOW_MS,
     );
 
-    console.log(">>>>> event: ", event);
-    // console.log(">>>>> entry: ", entry);
-
     if (requestTimes.length >= this.MAX_REQUESTS) {
       return {
         deez: "Rate limit exceeded. Please try again later.",
