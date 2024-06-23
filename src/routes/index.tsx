@@ -1,8 +1,8 @@
 import { Title } from "@solidjs/meta";
 import { Show } from "solid-js";
-import { type RouteDefinition, createAsync } from "@solidjs/router";
+import { type RouteDefinition, createAsync, useAction } from "@solidjs/router";
 import PokemonListing from "~/components/PokemonListing";
-import { getPokePair } from "~/server/pokemon";
+import { getPokePair, voteMutation } from "~/server/pokemon";
 
 export const route = {
   load: () => getPokePair(),
@@ -10,6 +10,7 @@ export const route = {
 
 export default function Home() {
   const pokemon = createAsync(() => getPokePair());
+  const castVote = useAction(voteMutation);
 
   return (
     <main class="text-center mx-auto text-gray-700 p-4">
@@ -22,28 +23,28 @@ export default function Home() {
         <Show when={pokemon()} fallback={<p>Loading...</p>}>
           {(data) => {
             return (
-              <div class="bg-red-400 p-8 flex justify-between items-center max-w-2xl flex-col md:flex-row animate-fade-in">
+              <div class="bg-indigo-100 p-8 flex justify-between items-center max-w-2xl rounded-lg flex-col md:flex-row animate-fade-in">
                 <PokemonListing
                   pokemon={data().firstPokemon}
-                  vote={
-                    () => console.log("voted")
-                    // castVote.mutate({
-                    //   votedFor: data().firstPokemon.id,
-                    //   votedAgainst: data().secondPokemon.id,
-                    // })
-                  }
+                  vote={async () => {
+                    console.log("voted");
+                    await castVote({
+                      votedFor: data().firstPokemon.id,
+                      votedAgainst: data().secondPokemon.id,
+                    });
+                  }}
                   disabled={false}
                 />
                 <div class="p-8 italic text-xl">{"or"}</div>
                 <PokemonListing
                   pokemon={data().secondPokemon}
-                  vote={
-                    () => console.log("voted")
-                    // castVote.mutate({
-                    //   votedFor: data().secondPokemon.id,
-                    //   votedAgainst: data().firstPokemon.id,
-                    // })
-                  }
+                  vote={async () => {
+                    console.log("voted");
+                    await castVote({
+                      votedFor: data().secondPokemon.id,
+                      votedAgainst: data().firstPokemon.id,
+                    });
+                  }}
                   disabled={false}
                 />
                 <div class="p-2" />

@@ -1,7 +1,7 @@
 import { cache, action } from "@solidjs/router";
 import { sql } from "drizzle-orm";
 
-import { db, votes } from "~/server/db";
+import { db, votes, Pokemon } from "~/server/db";
 
 const MAX_DEX_ID = 493;
 
@@ -35,15 +35,21 @@ const getPokePairData = async () => {
 
 export const getPokePair = cache(getPokePairData, "get-poke-pair");
 
-export const voteMutation = action(
-  async (votedFor: number, votedAgainst: number) => {
-    "use server";
-    await db.insert(votes).values({
-      votedForId: votedFor,
-      votedAgainstId: votedAgainst,
-    });
-  },
-);
+const submitVote = async ({
+  votedFor,
+  votedAgainst,
+}: {
+  votedFor: number;
+  votedAgainst: number;
+}) => {
+  "use server";
+  await db.insert(votes).values({
+    votedForId: votedFor,
+    votedAgainstId: votedAgainst,
+  });
+};
+
+export const voteMutation = action(submitVote, "submit-vote");
 
 const getPokemonVotesQuery = async () => {
   // TODO - convert to drizzle
@@ -69,11 +75,23 @@ ORDER BY
 `,
   );
 
-  const sortedPokemonVotes = await db.run(pokemonVotesQuery);
-  const sortedReults = sortedPokemonVotes.toJSON();
+  const sortedPokemonQuery = await db.run(pokemonVotesQuery);
+  const sortedPokemonVotesData = await sortedPokemonQuery.toJSON();
+  const processedPokemon = sortedPokemonVotesData.rows.map((pokemon: any) => {
+    const [id, name, spriteUrl, votesFor, votesAgainst] = pokemon;
+    const votePercent = generateCountPercent(votesFor, votesAgainst);
+    return {
+      id,
+      name,
+      spriteUrl,
+      votesFor,
+      votesAgainst,
+      votePercent,
+    };
+  });
 
   return {
-    sortedReults,
+    pokemon: processedPokemon,
   };
 };
 
@@ -81,3 +99,10 @@ export const getPokemonVotesResults = cache(
   getPokemonVotesQuery,
   "get-pokemon-results",
 );
+
+const generateCountPercent = (votesFor: number, votesAgainst: number) => {
+  if (votesFor + votesAgainst === 0) {
+    return 0;
+  }
+  return (votesFor / (votesFor + votesAgainst)) * 100;
+};
