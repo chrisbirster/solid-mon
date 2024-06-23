@@ -14,6 +14,11 @@ export default function Home() {
         console.log(error.message);
       }
     },
+    onSuccess(data) {
+      if (data.refetch_pokemon) {
+        pokemon.refetch();
+      }
+    },
   }));
 
   return (
@@ -25,16 +30,26 @@ export default function Home() {
         </div>
         <Show when={pokemon.data} fallback={<p>Loading...</p>}>
           {(data) => (
-            <div class="p-8 flex justify-between items-center max-w-2xl flex-col md:flex-row animate-fade-in">
+            <div class="bg-red-400 p-8 flex justify-between items-center max-w-2xl flex-col md:flex-row animate-fade-in">
               <PokemonListing
                 pokemon={data().firstPokemon}
-                vote={() => castVote.mutate({ id: data().firstPokemon.id })}
+                vote={() =>
+                  castVote.mutate({
+                    votedFor: data().firstPokemon.id,
+                    votedAgainst: data().secondPokemon.id,
+                  })
+                }
                 disabled={pokemon.isLoading}
               />
               <div class="p-8 italic text-xl">{"or"}</div>
               <PokemonListing
                 pokemon={data().secondPokemon}
-                vote={() => castVote.mutate({ id: data().secondPokemon.id })}
+                vote={() =>
+                  castVote.mutate({
+                    votedFor: data().secondPokemon.id,
+                    votedAgainst: data().firstPokemon.id,
+                  })
+                }
                 disabled={pokemon.isLoading}
               />
               <div class="p-2" />

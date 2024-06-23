@@ -9,4 +9,8 @@ const client = createClient({
 });
 
 export type Pokemon = drizzle_schema.Pokemon;
+export const votes = drizzle_schema.votes;
+export const pokemon = drizzle_schema.pokemon;
+export const votesFor = drizzle_schema.votesFor;
+export const votesAgainst = drizzle_schema.votesAgainst;
 export const db = drizzle(client, { schema: drizzle_schema });

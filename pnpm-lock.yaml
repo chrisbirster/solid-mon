@@ -55,6 +55,9 @@ devDependencies:
   '@ianvs/prettier-plugin-sort-imports':
     specifier: ^4.1.1
     version: 4.2.1(prettier@3.3.2)
+  '@tanstack/solid-query-devtools':
+    specifier: ^5.45.0
+    version: 5.45.0(@tanstack/solid-query@5.45.0)(solid-js@1.8.17)
   '@types/node':
     specifier: ^20.11.26
     version: 20.14.5
@@ -2198,7 +2201,21 @@ packages:
 
   /@tanstack/query-core@5.45.0:
     resolution: {integrity: sha512-RVfIZQmFUTdjhSAAblvueimfngYyfN6HlwaJUPK71PKd7yi43Vs1S/rdimmZedPWX/WGppcq/U1HOj7O7FwYxw==}
-    dev: false
+
+  /@tanstack/query-devtools@5.37.1:
+    resolution: {integrity: sha512-XcG4IIHIv0YQKrexTqo2zogQWR1Sz672tX2KsfE9kzB+9zhx44vRKH5si4WDILE1PIWQpStFs/NnrDQrBAUQpg==}
+    dev: true
+
+  /@tanstack/solid-query-devtools@5.45.0(@tanstack/solid-query@5.45.0)(solid-js@1.8.17):
+    resolution: {integrity: sha512-K4YU7OW5SAzY1iA4Nea6a5XRIw+6CTNN/tbovJhgax8agM5dXSGAs2yVknZ0z4izw+gu6Nw5cSiva81xdR+Wcw==}
+    peerDependencies:
+      '@tanstack/solid-query': ^5.45.0
+      solid-js: ^1.6.0
+    dependencies:
+      '@tanstack/query-devtools': 5.37.1
+      '@tanstack/solid-query': 5.45.0(solid-js@1.8.17)
+      solid-js: 1.8.17
+    dev: true
 
   /@tanstack/solid-query@5.45.0(solid-js@1.8.17):
     resolution: {integrity: sha512-bvgTVmW3GSUxUv6LwbeYxDaF/6Bjsks7JlGHzNEoZXB0kjsoxqavRYmLgAIrwn1vqyR53dkxvH+rDTwGfQv6CQ==}
@@ -2207,7 +2224,6 @@ packages:
     dependencies:
       '@tanstack/query-core': 5.45.0
       solid-js: 1.8.17
-    dev: false
 
   /@types/babel__core@7.20.5:
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
@@ -3156,7 +3172,6 @@ packages:
 
   /csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
-    dev: false
 
   /data-uri-to-buffer@4.0.1:
     resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
@@ -5555,12 +5570,10 @@ packages:
       seroval: ^1.0
     dependencies:
       seroval: 1.0.7
-    dev: false
 
   /seroval@1.0.7:
     resolution: {integrity: sha512-n6ZMQX5q0Vn19Zq7CIKNIo7E75gPkGCFUEqDpa8jgwpYr/vScjqnQ6H09t1uIiZ0ZSK0ypEGvrYK2bhBGWsGdw==}
     engines: {node: '>=10'}
-    dev: false
 
   /serve-placeholder@2.0.2:
     resolution: {integrity: sha512-/TMG8SboeiQbZJWRlfTCqMs2DD3SZgWp0kDQePz9yUuCnDfDh/92gf7/PxGhzXTKBIPASIHxFcZndoNbp6QOLQ==}
@@ -5650,7 +5663,6 @@ packages:
       csstype: 3.1.3
       seroval: 1.0.7
       seroval-plugins: 1.0.7(seroval@1.0.7)
-    dev: false
 
   /solid-refresh@0.6.3(solid-js@1.8.17):
     resolution: {integrity: sha512-F3aPsX6hVw9ttm5LYlth8Q15x6MlI/J3Dn+o3EQyRTtTxidepSTwAYdozt01/YA+7ObcciagGEyXIopGZzQtbA==}

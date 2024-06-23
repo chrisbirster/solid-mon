@@ -1,4 +1,3 @@
-import { VoidComponent } from "solid-js";
 import { Pokemon } from "~/server/db";
 
 const btn =
@@ -10,7 +9,8 @@ type Props = {
   disabled: boolean;
 };
 
-const PokemonListing: VoidComponent<Props> = (props) => {
+export default function PokemonListing(props: Props) {
+  console.log("PokemonListing", props.pokemon);
   return (
     <div
       class="flex flex-col items-center transition-opacity"
@@ -32,6 +32,4 @@ const PokemonListing: VoidComponent<Props> = (props) => {
       </button>
     </div>
   );
-};
-
-export default PokemonListing;
+}

@@ -1,5 +1,11 @@
-import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { sql, InferSelectModel } from "drizzle-orm";
+import {
+  index,
+  integer,
+  sqliteTable,
+  text,
+  alias,
+} from "drizzle-orm/sqlite-core";
+import { sql, InferSelectModel, InferInsertModel } from "drizzle-orm";
 
 export const foo = sqliteTable("foo", {
   bar: text("bar").notNull().default("Hey!"),
@@ -16,7 +22,7 @@ export type Pokemon = InferSelectModel<typeof pokemon>;
 export const votes = sqliteTable(
   "votes",
   {
-    id: text("id").primaryKey(),
+    id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
     createdAt: integer("created_at").default(sql`CURRENT_TIMESTAMP`),
     votedForId: integer("voted_for_id").references(() => pokemon.id),
     votedAgainstId: integer("voted_against_id").references(() => pokemon.id),
@@ -28,3 +34,8 @@ export const votes = sqliteTable(
     };
   },
 );
+
+export const votesFor = alias(votes, "votesFor");
+export const votesAgainst = alias(votes, "votesAgainst");
+
+export type Votes = InferInsertModel<typeof votes>;
