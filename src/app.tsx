@@ -19,7 +19,7 @@ export default function App() {
         <MetaProvider>
           <Title>Solid-Mon</Title>
           <Meta name="description" content={description} />
-          <Link rel="icon" href={"https://roundest.t3.gg/favicon.ico"} />
+          <Link rel="icon" href={"https://solid-mon.vercel.app/favicon.ico"} />
           <Meta property="og:title" content={title} />
           <Meta property="og:description" content={description} />
           <Meta property="og:image" content={imageMetaURL} />
