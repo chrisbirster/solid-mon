@@ -42,7 +42,6 @@ const PokemonListing = ({ pokemon, rank }: { pokemon; rank }) => {
         <div class="flex items-center pl-4">
           <img src={pokemon.spriteUrl} width={64} height={64} />
           <div class="pl-2 capitalize">{pokemon.name}</div>
-          {/* <p class="pl-2">{pokemon.votePercent} votes</p> */}
         </div>
       </div>
       <div class="absolute top-0 left-0 z-20 flex items-center justify-center px-2 font-semibold text-white bg-gray-600 border border-gray-500 shadow-lg rounded-br-md">

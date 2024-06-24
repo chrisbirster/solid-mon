@@ -1,16 +1,44 @@
 import { Title } from "@solidjs/meta";
-import { Show } from "solid-js";
-import { type RouteDefinition, createAsync, useAction } from "@solidjs/router";
+import { Show, createEffect } from "solid-js";
+import {
+  cache,
+  type RouteDefinition,
+  createAsync,
+  useAction,
+  useNavigate,
+} from "@solidjs/router";
 import PokemonListing from "~/components/PokemonListing";
 import { getPokePair, voteMutation } from "~/server/pokemon";
+import { getRequestEvent } from "solid-js/web";
+
+const checkDeez = cache(async () => {
+  "use server";
+  const event = getRequestEvent();
+
+  if (event?.locals.deez) {
+    return true;
+  }
+  return false;
+}, "check-deez");
 
 export const route = {
-  load: () => getPokePair(),
+  load: async () => {
+    getPokePair();
+    checkDeez();
+  },
 } satisfies RouteDefinition;
 
 export default function Home() {
   const pokemon = createAsync(() => getPokePair());
   const castVote = useAction(voteMutation);
+  const navigate = useNavigate();
+  const deez = createAsync(() => checkDeez(), { initialValue: false });
+
+  createEffect(() => {
+    if (deez()) {
+      navigate("blocked");
+    }
+  });
 
   return (
     <main class="text-center mx-auto text-gray-700 p-4">
