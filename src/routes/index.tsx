@@ -1,11 +1,11 @@
 import { Title } from "@solidjs/meta";
-import { Show, createEffect } from "solid-js";
+import { Show } from "solid-js";
 import {
   cache,
   type RouteDefinition,
   createAsync,
   useAction,
-  useNavigate,
+  Navigate,
 } from "@solidjs/router";
 import PokemonListing from "~/components/PokemonListing";
 import { getPokePair, voteMutation } from "~/server/pokemon";
@@ -31,14 +31,7 @@ export const route = {
 export default function Home() {
   const pokemon = createAsync(() => getPokePair());
   const castVote = useAction(voteMutation);
-  const navigate = useNavigate();
   const deez = createAsync(() => checkDeez(), { initialValue: false });
-
-  createEffect(() => {
-    if (deez()) {
-      navigate("blocked");
-    }
-  });
 
   return (
     <main class="text-center mx-auto text-gray-700 p-4">
@@ -77,6 +70,9 @@ export default function Home() {
               </div>
             );
           }}
+        </Show>
+        <Show when={deez()}>
+          <Navigate href="/blocked" />
         </Show>
       </div>
     </main>
